@@ -49,6 +49,10 @@ const baseOrderSchema = new mongoose.Schema(
             enum: ["CREATED", "PAID", "PREPARING", "DELIVERED", "CANCELLED"],
             default: "CREATED",
         },
+        scheduledFor:{
+            type: Date,
+            default: null,
+        },
     },
     {
         timestamps: true,
