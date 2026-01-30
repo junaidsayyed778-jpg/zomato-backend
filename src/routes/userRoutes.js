@@ -1,18 +1,15 @@
-import express from "express";
+import { Router } from "express";
 import { 
     getProfile, 
     updateProfile 
 } from "../controllers/userController.js";
 import { protect } from "../middlewares/authMiddleware.js";
 import { zodValidate } from "../middlewares/zodValidate.js";
+import { updateUserSchema } from "../validators/userSchema.js";
 
-const router = express.Router();
+const router = Router();
 
 router.get("/me", protect, getProfile);
-
-//PUT /api/users/me
-router.put("/me", protect, zodValidate(updateProfile),
-updateProfile
-);
+router.put("/me", protect, zodValidate(updateUserSchema), updateProfile);
 
 export default router;
