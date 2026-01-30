@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt"
-import User from "../models/User";
-import { generateAccessToken, generateRefreshToken } from "../utils/jwt";
+import User from "../models/User.js";
+import { generateAccessToken, generateRefreshToken } from "../utils/jwt.js";
 
 export const register = async (req, res, next) => {
     try{

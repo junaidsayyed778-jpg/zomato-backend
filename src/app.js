@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import { loadRoutes } from "./routes/index.js";
 
 const app = express();
 
@@ -17,7 +18,7 @@ app.get("/health", (req, res) => {
 });
 
 // Routes
-
+loadRoutes(app);
 
 // Global Error Handler
 app.use((err, req, res, next) => {

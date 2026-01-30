@@ -1,9 +1,10 @@
 import express from "express";
-import { createRestaurant, getAllRestaurant, updateRestaurant } from "../controllers/restaurantController";
-import { protect } from "../middlewares/authMiddleware";
-import { restrictTo } from "../middlewares/roleMiddleware";
-import { zodValidate } from "../middlewares/zodValidate";
-import { createOrderSchema } from "../validators/orderSchema";
+import { createRestaurant, getAllRestaurant, updateRestaurant } from "../controllers/restaurantController.js";
+import { protect } from "../middlewares/authMiddleware.js";
+import { restrictTo } from "../middlewares/roleMiddleware.js";
+import { zodValidate } from "../middlewares/zodValidate.js";
+import { createOrderSchema } from "../validators/orderSchema.js";
+import { createRestaurantSchema } from "../validators/restaurantSchema.js";
 
 
 const router = express.Router();
