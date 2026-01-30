@@ -8,8 +8,7 @@ export const protect = async (req, res, next) => {
         //check  token presence
         if(!authHeader || !authHeader.startsWith("Bearer ")){
             return res.status(401).json({
-                success: false,
-                message: "Authorization token missing",
+                message: "Not authorized"
             });
         }
 
@@ -17,7 +16,7 @@ export const protect = async (req, res, next) => {
         const token = authHeader.split(" ")[1];
 
         //verify token
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
 
         //fetch user
         const user = await User.findById(decoded.id);
@@ -35,8 +34,7 @@ export const protect = async (req, res, next) => {
         next();
     }catch(err){
         return res.status(401).json({
-            success: false,
-            message: "Invalid or expires token",
+            message: " Token expired or invalid "
         });
     }
 };
