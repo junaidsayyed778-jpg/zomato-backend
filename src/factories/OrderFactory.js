@@ -1,5 +1,5 @@
-import Food from "../models/Food"
-import order from "../models/Order";
+import Food from "../models/Food.js"
+import order from "../models/Order.js";
 
 export const createOrder = async ({ userId, items, paymentMethod }) => {
     const foods = await Food.find({
