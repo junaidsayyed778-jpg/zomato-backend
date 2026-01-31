@@ -31,7 +31,7 @@ const baseOrderSchema = new mongoose.Schema(
         },
         ],
 
-        totalPrice: {
+        totalAmount: {
             type: Number,
             required: true,
             min: 1,
