@@ -1,8 +1,18 @@
 import express from "express";
 import cors from "cors";
 import { loadRoutes } from "./routes/index.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
+
+app.use(cookieParser());
+
+app.use(
+    cors({
+        origin: "http://localhost:3000",
+        credentials: true,
+    })
+);
 
 // Global Middlewares
 app.use(cors());

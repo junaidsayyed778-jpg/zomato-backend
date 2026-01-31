@@ -4,7 +4,14 @@ import { generateAccessToken, generateRefreshToken } from "../utils/jwt.js";
 
 export const register = async (req, res, next) => {
     try{
-        const user = await User.create(req.body);
+
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+
+        const user = await User.create({
+            ...req.body,
+            password: hashedPassword,
+        });
 
         const accessToken = generateAccessToken(user);
         const refreshToken = generateRefreshToken(user);
@@ -12,8 +19,17 @@ export const register = async (req, res, next) => {
         user.refreshToken = refreshToken;
         await user.save();
 
+        //set httpOnly cookie
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000, //7 days
+        });
+
         res.status(201).json({
-            accessToken,
+            message: "User registered successfully",
+            accessToken: accessToken,
             refreshToken,
         });
 
@@ -48,9 +64,18 @@ export const login = async (req, res, next) => {
                 user.refreshToken = refreshToken;
                 await user.save();
 
+                //set httpOnly cookie
+                res.cookie("refreshToken", refreshToken, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: "strict",
+                    maxAge: 7 * 24 * 60 * 60 * 1000,  //days
+                })
+
                 res.status(200).json({
-                    accessToken,
-                    refreshToken,
+                    message: "Login successfull",
+                    accessToken: accessToken,
+                    refreshToken: refreshToken,
                 });
 
  }catch(err){
@@ -60,7 +85,7 @@ export const login = async (req, res, next) => {
 
 export const refreshAccessToken = async (req, res, next) => {
     try{
-        const { refreshToken } = req.body;
+        const { refreshToken } = req.cookies.refreshToken;
 
         if(!refreshToken) {
             return res.status(400).json({ message: "Refresh token required " });

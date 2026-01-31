@@ -3,7 +3,6 @@ import { createRestaurant, getAllRestaurant, updateRestaurant } from "../control
 import { protect } from "../middlewares/authMiddleware.js";
 import { restrictTo } from "../middlewares/roleMiddleware.js";
 import { zodValidate } from "../middlewares/zodValidate.js";
-import { createOrderSchema } from "../validators/orderSchema.js";
 import { createRestaurantSchema } from "../validators/restaurantSchema.js";
 
 
@@ -14,8 +13,8 @@ router.get("/", getAllRestaurant);
 
 //PROTECTED - create restaurant
 router.post("/", protect,
-    restrictTo("ADMIN", "RESTURANT_OWNER"),
-    zodValidate(createOrderSchema),
+    restrictTo("ADMIN", "RESTAURANT_OWNER"),
+    zodValidate(createRestaurantSchema),
     createRestaurant
 );
 
@@ -23,7 +22,7 @@ router.post("/", protect,
 router.put(
     "/:id",
     protect,
-    restrictTo("ADMIN", "RESTURANT_OWNER"),
+    restrictTo("ADMIN", "RESTAURANT_OWNER"),
     zodValidate(createRestaurantSchema),
     updateRestaurant
 );
