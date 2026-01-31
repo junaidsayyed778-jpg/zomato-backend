@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt"
 import User from "../models/User.js";
+import jwt from "jsonwebtoken"
 import { generateAccessToken, generateRefreshToken } from "../utils/jwt.js";
 
 export const register = async (req, res, next) => {
@@ -30,7 +31,6 @@ export const register = async (req, res, next) => {
         res.status(201).json({
             message: "User registered successfully",
             accessToken: accessToken,
-            refreshToken,
         });
 
 
@@ -73,9 +73,8 @@ export const login = async (req, res, next) => {
                 })
 
                 res.status(200).json({
-                    message: "Login successfull",
+                    message: "Login successful",
                     accessToken: accessToken,
-                    refreshToken: refreshToken,
                 });
 
  }catch(err){

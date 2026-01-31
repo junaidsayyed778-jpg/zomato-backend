@@ -1,19 +1,29 @@
 import Restaurant from "../models/Restaurant.js";
 
-//POST /api/restaurants
+//POST /api/reetaurants
 export const createRestaurant = async (req, res, next) => {
     try{
-        const restaurant = await Restaurant.create(req.body);
+        const { name, location } = req.body;
+
+        if(!name){
+            return res.status(400).json({ message: "Restaurant name is required"})
+        }
+
+        const restuarant = await Restaurant.create({
+            name,
+            location,
+            owner: req.user.id,
+        });
 
         res.status(201).json({
-            success: true,
-            data: restaurant,
-        });
+            message: "Restaurant created successfully",
+            restuarant,
+        })
+    
     }catch(err){
-        next(err);
+        next(err)
     }
-};
-
+}
 //GET /api/restaurants
 export const getAllRestaurant = async (req, res, next) => {
     try{
