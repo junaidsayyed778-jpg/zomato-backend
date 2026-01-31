@@ -1,5 +1,5 @@
-import Food from "../models/Food";
-import Restaurant from "../models/Restaurant";
+import Food from "../models/Food.js";
+import Restaurant from "../models/Restaurant.js";
 
 export const addFood = async (req, res, next) => {
     try{
