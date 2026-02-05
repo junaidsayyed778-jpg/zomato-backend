@@ -6,9 +6,6 @@ export const addFood = async (req, res, next) => {
         const { name, price, description } = req.body;
         const { restaurantId } = req.params;
 
-            console.log("REQ.USER.ID 👉", req.user._id.toString());
-console.log("RESTAURANT ID SENT 👉", restaurantId);
-
         const restaurant = await Restaurant.findOne({
             _id: restaurantId,
             owner: req.user._id,
