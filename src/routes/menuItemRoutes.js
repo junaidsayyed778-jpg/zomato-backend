@@ -1,9 +1,12 @@
 import express from "express";
 import { protect } from "../middlewares/authMiddleware.js";
 import { restrictTo } from "../middlewares/roleMiddleware.js";
-import { addMenuItem, deleteMenuItem, getRestaurantMenu, updateMenuItem } from "../controllers/menuItemController.js";
+import { addMenuItem, deleteMenuItem, getAllMenuItemForHome, getRestaurantMenu, updateMenuItem } from "../controllers/menuItemController.js";
 
 const router = express.Router();
+
+//home page feed
+router.get("/home", getAllMenuItemForHome);
 
 //Restaurant owner adds menu item
 router.post("/", protect, restrictTo("RESTAURANT_OWNER"), addMenuItem);

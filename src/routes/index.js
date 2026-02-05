@@ -4,6 +4,7 @@ import restaurantRoutes from "./restaurantRoute.js";
 import cartRoutes from "./cartRoutes.js"
 import foodRoutes from "./foodRoutes.js"
 import menuItemRoutes from "./menuItemRoutes.js"
+import publicRoutes from "./publicRoutes.js"
 
 export const loadRoutes = (app) => {
     app.use("/api/auth", authRoutes);
@@ -11,5 +12,6 @@ export const loadRoutes = (app) => {
     app.use("/api/cart", cartRoutes);
     app.use("/api/foods", foodRoutes);
     app.use("/api/restaurants", restaurantRoutes);
-    app.use("/api/menuItemId",menuItemRoutes);
+    app.use("/api/menu-items",menuItemRoutes);
+    app.use("/api/public", publicRoutes);
 };

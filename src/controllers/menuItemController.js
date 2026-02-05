@@ -5,7 +5,7 @@ import Restaurant from "../models/Restaurant.js";
 // add menu item (owner only)
 export const addMenuItem = async (req, res, next) => {
     try{
-        const { name, price, image, restaurantId} = req.body;
+        const { name, price, image, restaurantId } = req.body;
 
         if(!restaurantId) {
             return res.status(400).json({ message: "    Restaurant is required"});
