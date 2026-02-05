@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 
 const restaurantSchema = new mongoose.Schema(
     {
@@ -13,6 +13,11 @@ const restaurantSchema = new mongoose.Schema(
             required: true,
         },
 
+        owner: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true
+        },
         isOpen: {
             type: Boolean,
             default: true,

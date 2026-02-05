@@ -13,7 +13,7 @@ router.get("/", getAllRestaurant);
 
 //PROTECTED - create restaurant
 router.post("/", protect,
-    restrictTo("ADMIN", "RESTAURANT_OWNER"),
+    restrictTo("ADMIN", "RESTAURANT_OWNER "),
     zodValidate(createRestaurantSchema),
     createRestaurant
 );
@@ -22,7 +22,7 @@ router.post("/", protect,
 router.put(
     "/:id",
     protect,
-    restrictTo("ADMIN", "RESTAURANT_OWNER"),
+    restrictTo("ADMIN", "RESTAURANT_OWNER "),
     zodValidate(createRestaurantSchema),
     updateRestaurant
 );

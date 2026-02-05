@@ -23,6 +23,7 @@ const menuItemSchema = new mongoose.Schema(
             type: Boolean,
             default: true,
         },
+        image: String
     },
     { timestamps: true }
 );

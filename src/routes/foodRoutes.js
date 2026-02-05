@@ -5,6 +5,6 @@ import { addFood } from "../controllers/foodController.js";
 
 const router = Router();
 
-router.post("/add", protect, restrictTo("RESTAURANT_OWNER"), addFood );
+router.post("/:restaurantId/add", protect, restrictTo("RESTAURANT_OWNER"), addFood );
 
 export default router;

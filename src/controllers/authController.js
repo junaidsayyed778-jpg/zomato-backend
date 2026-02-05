@@ -2,6 +2,7 @@ import bcrypt from "bcrypt"
 import User from "../models/User.js";
 import jwt from "jsonwebtoken"
 import { generateAccessToken, generateRefreshToken } from "../utils/jwt.js";
+import Restaurant from "../models/Restaurant.js";
 
 export const register = async (req, res, next) => {
     try{
@@ -61,6 +62,12 @@ export const login = async (req, res, next) => {
                 const accessToken = generateAccessToken(user);
                 const refreshToken = generateRefreshToken(user);
 
+                let restaurant = null;
+
+                if(user.role === "RESTAURANT_OWNER"){
+                    restaurant = await Restaurant.findOne({ owner: user.id }).select("name location")
+                }
+
                 user.refreshToken = refreshToken;
                 await user.save();
 
@@ -75,6 +82,12 @@ export const login = async (req, res, next) => {
                 res.status(200).json({
                     message: "Login successful",
                     accessToken: accessToken,
+                    user: {
+                        _id: user.id,
+                        name: user.name,
+                        role: user.role
+                    },
+                    restaurant
                 });
 
  }catch(err){
@@ -84,7 +97,7 @@ export const login = async (req, res, next) => {
 
 export const refreshAccessToken = async (req, res, next) => {
     try{
-        const { refreshToken } = req.cookies.refreshToken;
+        const refreshToken = req.cookies && req.cookies.refreshToken;
 
         if(!refreshToken) {
             return res.status(400).json({ message: "Refresh token required " });

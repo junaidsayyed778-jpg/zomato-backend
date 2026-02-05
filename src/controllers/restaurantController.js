@@ -2,6 +2,8 @@ import Restaurant from "../models/Restaurant.js";
 
 //POST /api/reetaurants
 export const createRestaurant = async (req, res, next) => {
+      console.log("REQ BODY:", req.body);
+  console.log("USER:", req.user);
     try{
         const { name, location } = req.body;
 
@@ -9,7 +11,7 @@ export const createRestaurant = async (req, res, next) => {
             return res.status(400).json({ message: "Restaurant name is required"})
         }
 
-        const restuarant = await Restaurant.create({
+        const restaurant  = await Restaurant.create({
             name,
             location,
             owner: req.user.id,
@@ -17,7 +19,7 @@ export const createRestaurant = async (req, res, next) => {
 
         res.status(201).json({
             message: "Restaurant created successfully",
-            restuarant,
+            restaurant ,
         })
     
     }catch(err){
@@ -27,11 +29,11 @@ export const createRestaurant = async (req, res, next) => {
 //GET /api/restaurants
 export const getAllRestaurant = async (req, res, next) => {
     try{
-        const restaurant = await Restaurant.find();
+        const restaurant  = await Restaurant.find();
 
         res.status(200).json({
             success: true,
-            data: restaurant,
+            data: restaurant ,
         });
     }catch(err){
         next(err);
@@ -41,13 +43,13 @@ export const getAllRestaurant = async (req, res, next) => {
 //PUT /api/restaurant/:id
 export const updateRestaurant = async (req, res, next) => {
     try{
-        const restaurant = await Restaurant.findByIdAndUpdate(
+        const restaurant  = await Restaurant.findByIdAndUpdate(
             req.params.id,
             req.body,
             { new: true }
         );
 
-        if(!restaurant){
+        if(!restaurant ){
             return res.status(404).json({
                 message: "Restaurant not found"
             });
@@ -55,7 +57,7 @@ export const updateRestaurant = async (req, res, next) => {
 
         res.status(200).json({
             success: true,
-            data: restaurant,
+            data: restaurant ,
         })
 
     }catch(err){

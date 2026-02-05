@@ -3,14 +3,15 @@ import Restaurant from "../models/Restaurant.js";
 
 export const addFood = async (req, res, next) => {
     try{
-        const { name, price, description, restaurantId } = req.body;
+        const { name, price, description } = req.body;
+        const { restaurantId } = req.params;
 
-            console.log("👉 Logged-in User ID:", req.user.id);
-            console.log("👉 Restaurant ID from body:", restaurantId);
+            console.log("REQ.USER.ID 👉", req.user._id.toString());
+console.log("RESTAURANT ID SENT 👉", restaurantId);
 
         const restaurant = await Restaurant.findOne({
             _id: restaurantId,
-            owner: req.user.id,
+            owner: req.user._id,
         });
 
         if(!restaurant){
@@ -24,6 +25,7 @@ export const addFood = async (req, res, next) => {
             restaurant: restaurant._id,
         });
 
+         console.log("ADD FOOD HIT ✅", req.user?.role);
         res.status(201).json({
             message: "Food added successfully",
             food,
