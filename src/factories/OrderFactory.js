@@ -1,5 +1,5 @@
 import Food from "../models/Food.js"
-import order from "../models/Order.js";
+import Order from "../models/Order.js";
 
 export const createOrder = async ({ userId, items, paymentMethod }) => {
     const foods = await Food.find({
@@ -7,16 +7,36 @@ export const createOrder = async ({ userId, items, paymentMethod }) => {
     });
 
     if(foods.length !== items.length) {
-        console.log("Invalid food item in order");
+        throw new Error("Invalid food item in order");
     }
 
-    const restaurantId = foods[0].restuarant;
+    if(foods.length === 0){
+        throw new Error("   No food items found");
+    }
 
+    //Ensure all foods belongs to same restaurant
+    const restaurantId = foods[0].restaurant.toString();
+
+    const sameRestaurant = foods.every(
+        (food) => food.restaurant.toString() === restaurantId
+    );
+
+    
+    if(!sameRestaurant){
+        throw new Error("All items must be from the same restaurant")
+    }
+
+    //calculate total amount
     const totalAmount = foods.reduce((sum, food) => {
-        const qty = items.find((i) => i.foodId === food.id)?.quantity || 1;
+        const item = items.find(
+            (i) => i.foodId.toString() === food._id.toString()
+        );
+
+        return sum + food.price * item.quantity;
     }, 0);
 
-    return order.create({
+    //create order
+     const order = Order.create({
         user: userId,
         restaurant: restaurantId,
         items: items.map((i) => ({
@@ -26,4 +46,6 @@ export const createOrder = async ({ userId, items, paymentMethod }) => {
         totalAmount,
         paymentMethod,
     });
+
+    return order;
 };
