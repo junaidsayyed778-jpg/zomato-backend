@@ -12,6 +12,7 @@ export const loadRoutes = (app) => {
     app.use("/api/cart", cartRoutes);
     app.use("/api/foods", foodRoutes);
     app.use("/api/restaurants", restaurantRoutes);
+    app.use("/api/restaurants/orders/:id/accept")
     app.use("/api/menu-items",menuItemRoutes);
     app.use("/api/public", publicRoutes);
 };
