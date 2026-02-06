@@ -5,6 +5,7 @@ import cartRoutes from "./cartRoutes.js"
 import foodRoutes from "./foodRoutes.js"
 import menuItemRoutes from "./menuItemRoutes.js"
 import publicRoutes from "./publicRoutes.js"
+import orderRoutes from "./orderRoutes.js"
 
 export const loadRoutes = (app) => {
     app.use("/api/auth", authRoutes);
@@ -12,7 +13,10 @@ export const loadRoutes = (app) => {
     app.use("/api/cart", cartRoutes);
     app.use("/api/foods", foodRoutes);
     app.use("/api/restaurants", restaurantRoutes);
-    app.use("/api/restaurants/orders/:id/accept")
+
+    //orders (RBAC flows)
+    app.use("/api/restaurants/orders", orderRoutes);
+    
     app.use("/api/menu-items",menuItemRoutes);
     app.use("/api/public", publicRoutes);
 };
