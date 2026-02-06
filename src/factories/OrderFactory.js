@@ -1,4 +1,4 @@
-import Food from "../models/Food.js"
+import Food from "../models/MenuItem.js"
 import Order from "../models/Order.js";
 
 export const createOrder = async ({ userId, items, paymentMethod }) => {

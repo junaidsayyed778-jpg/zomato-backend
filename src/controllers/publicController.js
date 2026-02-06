@@ -1,4 +1,4 @@
-import Food from "../models/Food.js"
+import Food from "../models/MenuItem.js"
 
 export const listFoods = async (req, res, next) => {
     try{
