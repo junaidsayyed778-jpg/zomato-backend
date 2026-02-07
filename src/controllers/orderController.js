@@ -1,11 +1,12 @@
+
 import { success } from "zod";
 import { createOrder } from "../factories/OrderFactory.js"
 import Order from "../models/Order.js";
 
 export const placeOrder = async(req, res, next) => {
     try{
-        const order = await  createOrder({
-            userId: req.user.id,
+        const order = await createOrder({
+            userId: req.user._id,
             items: req.body.items,
             paymentMethod: req.body.paymentMethod,
         });
@@ -86,3 +87,22 @@ export const rejectOrder = async (req, res, next) =>{
         next(err)
     }
 };
+
+export const getMyOrders = async (req, res, next) => {
+    try{
+        const userId = req.user._id;
+
+        const order = await Order.find({ user: userId })
+        .populate("restaurant", "name location")
+        .populate("items.menuItem", "name price image")
+        .sort({ createdAt: -1 });  //latest first
+
+        res.json({
+            success: true,
+            count: order.length,
+            order
+        })
+    }catch(err){
+        next(err);
+    }
+}

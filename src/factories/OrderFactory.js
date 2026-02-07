@@ -1,51 +1,57 @@
-import Food from "../models/MenuItem.js"
+import MenuItem from "../models/MenuItem.js";
 import Order from "../models/Order.js";
 
-export const createOrder = async ({ userId, items, paymentMethod }) => {
-    const foods = await Food.find({
+export const createOrder = async ({ userId, items, paymentMethod }) =>{
+    if(!items || items.length === 0 ){
+        throw new Error("Order must contain at least one item");
+    }
+
+    //fetch menu items from DB 
+    const menuItems = await MenuItem.find({
         _id: {$in: items.map((i) => i.foodId)},
-    });
+        isAvailable: true,
+    }).populate("restaurant");
 
-    if(foods.length !== items.length) {
-        throw new Error("Invalid food item in order");
+    if(menuItems.length !== items.length) {
+        throw new Error("One or more menu items are invalid or unavailable");
     }
 
-    if(foods.length === 0){
-        throw new Error("   No food items found");
-    }
+    //all items must belong to same restaurant
+    const restaurantId = menuItems[0].restaurant._id;
 
-    //Ensure all foods belongs to same restaurant
-    const restaurantId = foods[0].restaurant.toString();
-
-    const sameRestaurant = foods.every(
-        (food) => food.restaurant.toString() === restaurantId
-    );
-
-    
-    if(!sameRestaurant){
-        throw new Error("All items must be from the same restaurant")
+    for(let item of menuItems){
+        if(item.restaurant._id.toString() !== restaurantId.toString()) {
+            throw new Error("All items must be from the same restaurant")
+        }
     }
 
     //calculate total amount
-    const totalAmount = foods.reduce((sum, food) => {
-        const item = items.find(
-            (i) => i.foodId.toString() === food._id.toString()
+    let totalAmount = 0;
+
+    const orderItems = menuItems.map((menuItem) =>{
+        const reqItem = items.find(
+            (i) => i.foodId.toString() === menuItem._id.toString()
         );
 
-        return sum + food.price * item.quantity;
-    }, 0);
+        const quantity = reqItem?.quantity || 1;
+        totalAmount += menuItem.price * quantity;
 
-    //create order
-     const order = Order.create({
-        user: userId,
-        restaurant: restaurantId,
-        items: items.map((i) => ({
-            food: i.foodId,
-            quantity: i.quantity,
-        })),
-        totalAmount,
-        paymentMethod,
+        return{
+            menuItem: menuItem._id,
+            quantity,
+            price: menuItem.price,
+        };
     });
 
-    return order;
-};
+    //create order
+    const order = await Order.create({
+        user: userId,
+        restaurant: restaurantId,
+        items: orderItems,
+        totalAmount,
+        paymentMethod,
+        status: "PENDING",
+    });
+
+    return order
+}

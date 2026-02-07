@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { required } from "zod/mini";
 
 
 const baseOrderSchema = new mongoose.Schema(
@@ -28,6 +29,10 @@ const baseOrderSchema = new mongoose.Schema(
                 required: true,
                 min: 1,
             },
+            price: {
+                type: Number, required: true
+            },
+            
         },
         ],
 
