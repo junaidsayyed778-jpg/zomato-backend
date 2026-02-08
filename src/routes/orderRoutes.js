@@ -3,7 +3,7 @@ import { zodValidate } from "../middlewares/zodValidate.js";
 import { createOrderSchema } from "../validators/orderSchema.js";
 import { protect } from "../middlewares/authMiddleware.js";
 import { restrictTo } from "../middlewares/roleMiddleware.js";
-import { acceptOrder, placeOrder, rejectOrder } from "../controllers/orderController.js";
+import { acceptOrder, getMyOrders, placeOrder, rejectOrder } from "../controllers/orderController.js";
 
 const router = express.Router();
 
@@ -12,6 +12,8 @@ const router = express.Router();
 router.post("/", protect, zodValidate(createOrderSchema),
 placeOrder);
 
+//user : get his own orders
+router.get("/my", protect, getMyOrders)
 
 //Restaurant owner action
 router.patch("/restaurant/order/:id/accept", protect, restrictTo("RESTAURANT_OWNER"), acceptOrder);

@@ -44,14 +44,14 @@ const baseOrderSchema = new mongoose.Schema(
         
         paymentMethod: {
             type: String,
-            enum: ["CASH", "CARD", "ONLINE"],
+            enum: ["CASH", "CARD", "UPI"],
             default: "CASH",
             required: true,
         },
 
         status: {
             type: String,
-            enum: ["PENDING", "ACCEPTED", "PREPARING", "DELIVERED", "REJECTED", "OUT_OF_DELIVERY"],
+            enum: ["PENDING", "ACCEPTED", "PREPARING","PICKUP", "DELIVERED", "REJECTED", "OUT_OF_DELIVERY"],
             default: "PENDING",
         },
         scheduledFor:{
