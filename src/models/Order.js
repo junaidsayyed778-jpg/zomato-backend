@@ -51,7 +51,7 @@ const baseOrderSchema = new mongoose.Schema(
 
         status: {
             type: String,
-            enum: ["PENDING", "ACCEPTED", "PREPARING","PICKUP", "DELIVERED", "REJECTED", "OUT_OF_DELIVERY"],
+            enum: ["PENDING", "ACCEPTED", "PREPARING","PICKUP", "DELIVERED", "REJECTED","READY_FOR_PICKUP", "OUT_OF_DELIVERY", "COMPLETED"],
             default: "PENDING",
         },
         scheduledFor:{

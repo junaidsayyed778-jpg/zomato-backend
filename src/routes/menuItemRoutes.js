@@ -3,6 +3,7 @@ import { protect } from "../middlewares/authMiddleware.js";
 import { restrictTo } from "../middlewares/roleMiddleware.js";
 import { addMenuItem, deleteMenuItem, getAllMenuItemForHome, getRestaurantMenu, updateMenuItem } from "../controllers/menuItemController.js";
 
+
 const router = express.Router();
 
 //home page feed
@@ -19,5 +20,6 @@ router.patch("/:menuItemId", updateMenuItem);
 
 //owner delete item
 router.delete("/:menuItemId", deleteMenuItem);
+
 
 export default router;

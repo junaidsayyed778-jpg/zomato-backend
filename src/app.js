@@ -30,6 +30,7 @@ app.get("/health", (req, res) => {
 // Routes
 loadRoutes(app);
 
+
 // Global Error Handler
 app.use((err, req, res, next) => {
     console.error(err);

@@ -17,7 +17,7 @@ export const createOrder = async ({ userId, items, paymentMethod }) =>{
     }
 
     //all items must belong to same restaurant
-    const restaurantId = menuItems[0].restaurant._id;
+   const restaurantId = menuItems[0].restaurant._id;
 
     for(let item of menuItems){
         if(item.restaurant._id.toString() !== restaurantId.toString()) {

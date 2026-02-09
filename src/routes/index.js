@@ -13,7 +13,7 @@ export const loadRoutes = (app) => {
     app.use("/api/restaurants", restaurantRoutes);
 
     //orders (RBAC flows)
-    app.use("/api/restaurants/orders", orderRoutes);
+    app.use("/api/orders", orderRoutes);
 
     app.use("/api/menu-items",menuItemRoutes);
     app.use("/api/public", publicRoutes);
