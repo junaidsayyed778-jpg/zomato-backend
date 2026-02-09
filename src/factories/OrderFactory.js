@@ -1,7 +1,7 @@
 import MenuItem from "../models/MenuItem.js";
 import Order from "../models/Order.js";
 
-export const createOrder = async ({ userId, items, paymentMethod }) =>{
+export const createOrder = async ({ userId, items, paymentMethod, idempotencyKey = null }) =>{
     if(!items || items.length === 0 ){
         throw new Error("Order must contain at least one item");
     }
@@ -43,7 +43,28 @@ export const createOrder = async ({ userId, items, paymentMethod }) =>{
         };
     });
 
-    //create order
+    // If an idempotency key is provided, atomically create-or-return the same order
+    if (idempotencyKey) {
+        const order = await Order.findOneAndUpdate(
+            { idempotencyKey },
+            {
+                $setOnInsert: {
+                    user: userId,
+                    restaurant: restaurantId,
+                    items: orderItems,
+                    totalAmount,
+                    paymentMethod,
+                    status: "PENDING",
+                    idempotencyKey,
+                },
+            },
+            { new: true, upsert: true }
+        );
+
+        return order;
+    }
+
+    //create order without idempotency key
     const order = await Order.create({
         user: userId,
         restaurant: restaurantId,
@@ -53,5 +74,5 @@ export const createOrder = async ({ userId, items, paymentMethod }) =>{
         status: "PENDING",
     });
 
-    return order
+    return order;
 }

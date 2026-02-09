@@ -58,6 +58,11 @@ const baseOrderSchema = new mongoose.Schema(
             type: Date,
             default: null,
         },
+        idempotencyKey: {
+            type: String,
+            unique: true,
+            sparse: true,
+        },
     },
     {
         timestamps: true,

@@ -5,17 +5,22 @@ import { protect } from "../middlewares/authMiddleware.js";
 import { restrictTo } from "../middlewares/roleMiddleware.js";
 import {
   acceptOrder,
-  getIncomingOrders,
   getMyOrders,
-  manageOrderStatus,
   placeOrder,
   rejectOrder,
 } from "../controllers/orderController.js";
+import { Idempotency } from "../middlewares/idempotency.js";
 
 const router = express.Router();
 
 // create order (USER)
-router.post("/", protect, zodValidate(createOrderSchema), placeOrder);
+router.post(
+  "/",
+  protect,
+  Idempotency,
+  zodValidate(createOrderSchema),
+  placeOrder,
+);
 
 //user : get his own orders
 router.get("/my", protect, getMyOrders);
@@ -34,7 +39,5 @@ router.patch(
   restrictTo("RESTAURANT_OWNER"),
   rejectOrder,
 );
-
-
 
 export default router;

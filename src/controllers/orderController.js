@@ -1,20 +1,36 @@
-import { success } from "zod";
+
 import { createOrder } from "../factories/OrderFactory.js";
+import IdempotencyKey from "../models/IdempotencyKey.js";
 import Order from "../models/Order.js";
 import Restaurant from "../models/Restaurant.js";
+
 
 export const placeOrder = async (req, res, next) => {
   try {
     const order = await createOrder({
       userId: req.user._id,
+      restaurant: req.body.restaurant,
       items: req.body.items,
       paymentMethod: req.body.paymentMethod,
+    
     });
 
-    res.status(201).json({
-      message: "order placed successfully",
+    const response = {
+      success: true,
+      message: "Order places succesfully",
       order,
-    });
+    };
+
+    //store result in idempotency cache
+    if (req.idempotencyKey) {
+      await IdempotencyKey.findOneAndUpdate(
+        { key: req.idempotencyKey },
+        { $set: { status: "DONE", response } },
+        { new: true }
+      );
+    }
+
+    res.status(201).json(response);
   } catch (err) {
     next(err);
   }
@@ -199,3 +215,4 @@ export const manageOrderStatus = async (req, res, next) => {
     next(err);
   }
 };
+
